@@ -19,6 +19,10 @@ public class LoginPage extends BasePage{
     WebElement inputPassword;
     @FindBy(xpath = "//button[text()='Y’alla!']")
     WebElement btnYalla;
+    @FindBy(xpath = "//div[@class='dialog-container']")
+    WebElement popUpMessage;
+    @FindBy(xpath = "//div[text()=' Password is required ']")
+    WebElement messageErrorPassword;
 
 
     public void  typeLoginForb(String email, String password){
@@ -26,6 +30,13 @@ public class LoginPage extends BasePage{
         inputPassword.sendKeys(password);
         btnYalla.click();
 
+    }
+    public boolean validatePopUpMessage(String text){
+        return isTextElementPresent(popUpMessage, text);
+    }
+
+    public boolean validateMessageErrorPassword(){
+        return isElementPresent(messageErrorPassword);
     }
 
 }
