@@ -1,73 +1,105 @@
 package ui_tests;
 
-import dto.userLombok;
+import dto.UserLombok;
 import manager.ApplicationManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.HomePage;
+import pages.LoginPage;
 import pages.SignUpPage;
+import utils.HeaderMenuItem;
 
-import static utils.RandomUtils.generateEmail;
+import static pages.BasePage.*;
+import static utils.RandomUtils.*;
 
 public class SignUpTests extends ApplicationManager {
-
     HomePage homePage;
     SignUpPage signUpPage;
-
     @BeforeMethod
-    public void goToLoginPage() {
+    public void goToLoginPage(){
         homePage = new HomePage(getDriver());
-        homePage.clickBtnSignUpHeader();
-        signUpPage = new SignUpPage(getDriver());
+        signUpPage = clickButtonsOnHeader(HeaderMenuItem.SIGN_UP);
     }
 
     @Test
-    public void SignUpPositiveTest() {
-        signUpPage.typeSignUpForm("Rimma", "Ogulchanskaia", "rimma@gmail.com", "Rimma@12345!");
-
-
-    }
-
-    @Test
-    public void SignUpPositiveTestLombok() {
-        userLombok user = userLombok.builder()
-                .username("Kate")
-                .lastName("Gross")
-                .email(generateEmail(10))
-                .password("Gross12345!")
+    public void signUpPositiveTest(){
+        UserLombok user = UserLombok.builder()
+                .firstName("Bilbo")
+                .lastName("Baggins")
+                .username(generateEmail(7))
+                .password("Password123!")
                 .build();
-
-        signUpPage.typeSignUpForm(user.getUsername(), user.getLastName(), user.getEmail(), user.getPassword());
-        Assert.assertTrue(signUpPage.validatePopUpMessage("You are logged in success"));
-
-
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickCheckBox();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.validatePopUpMessage("Registered"));
+    }
+    @Test
+    public void signUpNegativeTest_WOcheckBox(){
+        UserLombok user = UserLombok.builder()
+                .firstName("Bilbo")
+                .lastName("Baggins")
+                .username(generateEmail(7))
+                .password("Password123!")
+                .build();
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickBtnYalla();
+        Assert.assertFalse(signUpPage.btnYallaIaEnabled());
+    }
+    @Test
+    public void signUpNegativeTest_WOname(){
+        UserLombok user = UserLombok.builder()
+                .firstName("")
+                .lastName("Baggins")
+                .username(generateEmail(7))
+                .password("Password123!")
+                .build();
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickCheckBox();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.validateErrorMessage("Name is required"));
     }
 
     @Test
-    public void SignUpNegativeTestDuplicateLombok() {
-        userLombok user = userLombok.builder()
-                .username("Kate")
-                .lastName("Gross")
-                .email("grossil@gmail.com")
-                .password("Gross12345!")
+    public void signUpNegativeTest_WOlastName(){
+        UserLombok user = UserLombok.builder()
+                .firstName("Bilbo")
+                .lastName("")
+                .username(generateEmail(7))
+                .password("Password123!")
                 .build();
-
-        signUpPage.typeSignUpForm(user.getUsername(), user.getLastName(), user.getEmail(), user.getPassword());
-        Assert.assertTrue(signUpPage.validatePopUpMessage("User already exists"));
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickCheckBox();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.validateErrorMessage("Last name is required"));
     }
 
     @Test
-    public void SignUpNegativeTestWrongPasswordWithoutUpperLetterLombok() {
-        userLombok user = userLombok.builder()
-                .username("Kate")
-                .lastName("Gross")
-                .email(generateEmail(10))
-                .password("gross12345!")
+    public void signUpNegativeTest_WOemail(){
+        UserLombok user = UserLombok.builder()
+                .firstName("Bilbo")
+                .lastName("Baggins")
+                .username("")
+                .password("Password123!")
                 .build();
-
-        signUpPage.typeSignUpForm(user.getUsername(), user.getLastName(), user.getEmail(), user.getPassword());
-        Assert.assertTrue(signUpPage.validateMessageErrorInPassword(), "Password must contain 1 uppercase letter, 1 lowercase letter, 1 number and one special symbol of [@$#^&*!]");
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickCheckBox();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.validateErrorMessage("Email is required"));
     }
 
+    @Test
+    public void signUpNegativeTest_WOpassword(){
+        UserLombok user = UserLombok.builder()
+                .firstName("Bilbo")
+                .lastName("Baggins")
+                .username(generateEmail(10))
+                .password("")
+                .build();
+        signUpPage.typeSignUpForm(user);
+        signUpPage.clickCheckBox();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.validateErrorMessage("Password is required"));
+    }
 }

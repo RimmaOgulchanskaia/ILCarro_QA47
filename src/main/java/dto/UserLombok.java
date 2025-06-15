@@ -1,6 +1,5 @@
 package dto;
 
-
 import lombok.*;
 
 @ToString
@@ -8,12 +7,10 @@ import lombok.*;
 @Getter
 @Setter
 
-public class userLombok {
+public class UserLombok {
     private String username;
-    private String lastName;
-    private String email;
     private String password;
-
-
+    private String firstName;
+    private String lastName;
 
 }

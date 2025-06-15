@@ -9,34 +9,31 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 public class LoginPage extends BasePage{
     public LoginPage(WebDriver driver){
         setDriver(driver);
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10),this);
-
-
+        PageFactory.initElements(
+                new AjaxElementLocatorFactory(driver, 10), this);
     }
-    @FindBy(id= "email")
-    WebElement inputEmail;
-    @FindBy(id= "password")
+
+    @FindBy(id = "email")
+    WebElement inputEmail;   // = driver.findElement(By.id("email"))
+
+    @FindBy(id = "password")
     WebElement inputPassword;
+
     @FindBy(xpath = "//button[text()='Y’alla!']")
     WebElement btnYalla;
-    @FindBy(xpath = "//div[@class='dialog-container']")
-    WebElement popUpMessage;
+
     @FindBy(xpath = "//div[text()=' Password is required ']")
     WebElement messageErrorPassword;
 
-
-    public void  typeLoginForb(String email, String password){
+    public void typeLoginForm(String email, String password){
         inputEmail.sendKeys(email);
         inputPassword.sendKeys(password);
         btnYalla.click();
+    }
 
-    }
-    public boolean validatePopUpMessage(String text){
-        return isTextElementPresent(popUpMessage, text);
-    }
+
 
     public boolean validateMessageErrorPassword(){
         return isElementPresent(messageErrorPassword);
     }
-
 }
