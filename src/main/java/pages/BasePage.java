@@ -4,11 +4,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.HeaderMenuItem;
 
 public abstract class BasePage {
 
     static WebDriver driver;
+
+    public Logger logger = LoggerFactory.getLogger(BasePage.class);
 
     public static void setDriver(WebDriver wd) {
         driver = wd;

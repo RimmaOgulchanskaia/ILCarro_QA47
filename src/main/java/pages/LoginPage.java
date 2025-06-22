@@ -1,5 +1,6 @@
 package pages;
 
+import dto.UserLombok;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,6 +27,7 @@ public class LoginPage extends BasePage{
     WebElement messageErrorPassword;
 
     public void typeLoginForm(String email, String password){
+        logger.info("Type login form");
         inputEmail.sendKeys(email);
         inputPassword.sendKeys(password);
         btnYalla.click();
