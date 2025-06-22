@@ -8,6 +8,8 @@ import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
 
+import java.lang.reflect.Method;
+
 import static utils.RandomUtils.*;
 
 public class LoginTests extends ApplicationManager {
@@ -20,13 +22,24 @@ public class LoginTests extends ApplicationManager {
         loginPage = new LoginPage(getDriver());
     }
 
+
     @Test
-    public void loginPositiveTest(){
+    public void loginPositiveTest(Method method){
+        logger.info("Start method " + method.getName());
         HomePage homePage = new HomePage(getDriver());
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
-        loginPage.typeLoginForm("bilbo_baggins_12345@mail.com", "Password123!");
+
+        UserLombok user = UserLombok.builder()
+                .username("bilbo_baggins_12345@mail.com")
+                .password("Password123!")
+                .build();
+
+        loginPage.typeLoginForm(user.getUsername(), user.getPassword());
+        logger.info("test data -> " + user);
     }
+
+
 
     @Test
     public void loginPositiveTest_lombok(){
