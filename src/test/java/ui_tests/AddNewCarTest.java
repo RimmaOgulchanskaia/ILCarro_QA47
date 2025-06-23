@@ -3,14 +3,18 @@ package ui_tests;
 import dto.Car;
 import manager.ApplicationManager;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LetCarWorkPage;
 import pages.LoginPage;
 import utils.HeaderMenuItem;
+import utils.TestNGListener;
 
 import static pages.BasePage.*;
 import static utils.RandomUtils.*;
+
+@Listeners(TestNGListener.class)
 
 public class AddNewCarTest extends ApplicationManager {
     LoginPage loginPage;
@@ -36,7 +40,8 @@ public class AddNewCarTest extends ApplicationManager {
                 .carClass("C")
                 .serialNumber("Opel->"+ generateString(7))
                 .pricePerDay(100.77)
-                .about("about").build();
+                .about("about")
+                .build();
         letCarWorkPage.typeaddNewCarForm(car);
 
     }
