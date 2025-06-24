@@ -47,6 +47,34 @@ public class LetCarWorkPage extends BasePage{
     @FindBy(xpath = "//button[@type='submit']")
     WebElement btnSubmit;
 
+    @FindBy(xpath = "//div[text()=' Make is required ']")
+    WebElement messageMakeIsRequired;
+
+    @FindBy(xpath = "//div[text()=' Model is required ']")
+    WebElement messageModelIsRequired;
+
+    @FindBy(xpath = "//div[text()=' Year required ']")
+    WebElement messageYearIsRequired;
+
+    @FindBy(xpath = "//div[text()=' Number of seats is required ']")
+    WebElement messageNumberOfSeatsIsRequired;
+
+    public boolean validateMessageNumberOfSeatsIsRequired(){
+        return isElementPresent(messageNumberOfSeatsIsRequired);
+    }
+
+    public boolean validateMessageYearIsRequired(){
+        return isElementPresent(messageYearIsRequired);
+    }
+
+    public boolean validateMessageMakeIsRequired(){
+        return isElementPresent(messageMakeIsRequired);
+    }
+
+    public boolean validateMessageModelIsRequired(){
+        return isElementPresent(messageModelIsRequired);
+    }
+
 
     public void typeaddNewCarForm(Car car) {
         inputCity.sendKeys(car.getCity());
@@ -55,7 +83,11 @@ public class LetCarWorkPage extends BasePage{
         inputModel.sendKeys(car.getModel());
         inputYear.sendKeys(car.getYear());
         selectFuel.sendKeys(car.getFuel());
-        inputSeats.sendKeys(car.getSeats().toString());
+        if (car.getSeats() == null) {
+            inputSeats.click();
+        } else {
+            inputSeats.sendKeys(car.getSeats().toString());
+        }
         inputCarClass.sendKeys(car.getCarClass());
         inputSerialNumber.sendKeys(car.getSerialNumber());
         inputPrice.sendKeys(car.getPricePerDay() + "");
