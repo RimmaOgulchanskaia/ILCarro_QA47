@@ -1,5 +1,6 @@
 package ui_tests;
 
+import data_provider.CarDP;
 import dto.Car;
 import manager.ApplicationManager;
 import org.testng.Assert;
@@ -9,6 +10,7 @@ import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LetCarWorkPage;
 import pages.LoginPage;
+import utils.Fuel;
 import utils.HeaderMenuItem;
 import utils.TestNGListener;
 
@@ -36,13 +38,20 @@ public class AddNewCarTest extends ApplicationManager {
                 .manufacture("Opel")
                 .model("Astra")
                 .year("2020")
-                .fuel("Gas")
+                .fuel(Fuel.HYBRID.getValue())
                 .seats(4)
                 .carClass("C")
                 .serialNumber("Opel->"+ generateString(7))
                 .pricePerDay(100.77)
                 .about("about")
+                .image("Lexus.jpg")
                 .build();
+        letCarWorkPage.typeaddNewCarForm(car);
+
+    }
+
+    @Test(dataProvider = "addNewCarDP", dataProviderClass = CarDP.class)
+    public void addNewCarPositiveDP(Car car){
         letCarWorkPage.typeaddNewCarForm(car);
 
     }
@@ -119,6 +128,13 @@ public class AddNewCarTest extends ApplicationManager {
                 .build();
         letCarWorkPage.typeaddNewCarForm(car);
         Assert.assertTrue(letCarWorkPage.validateMessageNumberOfSeatsIsRequired(), " Number of seats is required ");
+
+    }
+    @Test(dataProvider = "addNewCarDPFile", dataProviderClass = CarDP.class)
+    public void addNewCarNegativeTestLesson(Car car){
+        logger.info("Test data->" + car);
+        letCarWorkPage.typeaddNewCarForm(car);
+        Assert.assertFalse(letCarWorkPage.isEnabledSubmitBtn());
 
     }
 

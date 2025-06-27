@@ -30,11 +30,11 @@ public class ApplicationManager {
         WebDriverListener webDriverListener= new WDListener();
         driver= new EventFiringDecorator<>(webDriverListener).decorate(driver);
     }
-    @AfterMethod
+    @AfterMethod(enabled = false)
     public void tearDown(){
         //logger.info("Stop test");
-    //    if(driver!=null)
-    //        driver.quit();
+        if(driver!=null)
+            driver.quit();
     }
 
 }

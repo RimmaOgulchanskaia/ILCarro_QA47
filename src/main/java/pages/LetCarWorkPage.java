@@ -6,6 +6,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.Select;
+import utils.Fuel;
+
+import java.io.File;
 
 public class LetCarWorkPage extends BasePage{
     public LetCarWorkPage(WebDriver driver){
@@ -59,6 +63,9 @@ public class LetCarWorkPage extends BasePage{
     @FindBy(xpath = "//div[text()=' Number of seats is required ']")
     WebElement messageNumberOfSeatsIsRequired;
 
+    @FindBy(xpath = "//input[@type='file']")
+    WebElement inputFile;
+
     public boolean validateMessageNumberOfSeatsIsRequired(){
         return isElementPresent(messageNumberOfSeatsIsRequired);
     }
@@ -78,11 +85,13 @@ public class LetCarWorkPage extends BasePage{
 
     public void typeaddNewCarForm(Car car) {
         inputCity.sendKeys(car.getCity());
-        googlMapsBtnOk.click();
+        //googlMapsBtnOk.click();
         inputManufactura.sendKeys(car.getManufacture());
         inputModel.sendKeys(car.getModel());
         inputYear.sendKeys(car.getYear());
-        selectFuel.sendKeys(car.getFuel());
+        //selectFuel.sendKeys(car.getFuel());
+        //typeFuel(Fuel.DIESEL.getValue());
+        typeFuel(car.getFuel());
         if (car.getSeats() == null) {
             inputSeats.click();
         } else {
@@ -91,6 +100,25 @@ public class LetCarWorkPage extends BasePage{
         inputCarClass.sendKeys(car.getCarClass());
         inputSerialNumber.sendKeys(car.getSerialNumber());
         inputPrice.sendKeys(car.getPricePerDay() + "");
+        //addPhoto(car.getImage());
 
+    }
+
+    private void addPhoto(String fileName) {
+        inputFile.sendKeys(new File("src/test/resources/Photos/Lexus.jpg").getAbsolutePath());
+
+    }
+
+    private void typeFuel(String fuel) {
+        if (fuel != null && !fuel.isBlank()) {
+            Select select = new Select(selectFuel);
+            select.selectByValue(fuel);
+        } else {
+            inputSeats.click();
+        }
+    }
+
+    public boolean isEnabledSubmitBtn(){
+        return elementIsEnabled(btnSubmit);
     }
 }

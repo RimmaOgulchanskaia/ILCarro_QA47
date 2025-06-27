@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
+import java.time.LocalDate;
+
 public class HomePage extends BasePage {
     public HomePage(WebDriver driver){
         setDriver(driver);
@@ -21,8 +23,24 @@ public class HomePage extends BasePage {
     WebElement btnSignUpHeader;
     //одно и тоже с записью WebElement btn...= driver.findElement(By.xpath...
 
-    public void clickBtnLoginHeader(){
+    @FindBy(id= "city")
+    WebElement inputCity;
 
+    @FindBy(id= "dates")
+    WebElement inputDates;
+
+    public void typeSearchForm(String city, LocalDate startDate, LocalDate endDate){
+        inputCity.sendKeys(city);
+        inputDates.sendKeys(dateToString(startDate)+"/" + dateToString(endDate));
+
+    }
+
+    private String dateToString(LocalDate date){
+        return (date.getMonthValue()) + "/"+ date.getDayOfMonth()+"/" + date.getYear();
+
+    }
+
+    public void clickBtnLoginHeader(){
         btnLoginHeader.click();
     }
 
