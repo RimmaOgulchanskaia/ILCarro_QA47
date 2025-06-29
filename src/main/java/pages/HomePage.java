@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,9 +30,41 @@ public class HomePage extends BasePage {
     @FindBy(id= "dates")
     WebElement inputDates;
 
+    @FindBy(xpath = "//button[@type='submit']")
+    WebElement btnYalla;
+
+    @FindBy(xpath = "//button[@aria-label='Choose month and year']")
+    WebElement btnYearMonthDay;
+
+
+
+
+    public void typeSearchFormCalendar(String city, LocalDate startDate, LocalDate endDate) {
+        inputCity.sendKeys(city);
+        inputDates.click();
+        typeYearMonthDay(startDate);
+        typeYearMonthDay(endDate);
+        removeDisabledBtnSearch();
+        btnYalla.click();
+    }
+
+    private void typeYearMonthDay(LocalDate date) {
+        btnYearMonthDay.click();
+        String year = Integer.toString(date.getYear());  //2025
+        driver.findElement(By.xpath("//div[contains(text(),'" + year + "')]")).click();//div[contains(text(),'2025')]
+        String month = date.getMonth().toString();
+        System.out.println(month.substring(0,3));
+        driver.findElement(By.xpath("//div[contains(text(),'" + month.substring(0,3) + "')]")).click();
+        String day = String.valueOf(date.getDayOfMonth());
+        driver.findElement(By.xpath("//div[contains(text(),'" + day + "')]")).click();
+    }
+
+
     public void typeSearchForm(String city, LocalDate startDate, LocalDate endDate){
         inputCity.sendKeys(city);
-        inputDates.sendKeys(dateToString(startDate)+"/" + dateToString(endDate));
+        inputDates.sendKeys(dateToString(startDate)+"-" + dateToString(endDate));
+        removeDisabledBtnSearch();
+        btnYalla.click();
 
     }
 

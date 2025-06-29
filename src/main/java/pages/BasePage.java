@@ -1,12 +1,17 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.HeaderMenuItem;
+
+import java.time.Duration;
 
 public abstract class BasePage {
 
@@ -21,7 +26,7 @@ public abstract class BasePage {
     @FindBy(xpath = "//div[@class='dialog-container']")
     WebElement popUpMessage;
 
-    public boolean validatePopUpMessage(String text){
+    public boolean validatePopUpMessage(String text) {
         return isTextInElementPresent(popUpMessage, text);
     }
 
@@ -52,7 +57,7 @@ public abstract class BasePage {
             case LET_CAR_WORK -> {
                 return (T) new LetCarWorkPage(driver);
             }
-            default -> throw  new IllegalArgumentException("Invalid parameter headerMenuItem");
+            default -> throw new IllegalArgumentException("Invalid parameter headerMenuItem");
         }
     }
 
@@ -64,7 +69,17 @@ public abstract class BasePage {
         return element.isDisplayed();
     }
 
-    public boolean elementIsEnabled(WebElement element){
+    public boolean elementIsEnabled(WebElement element) {
         return element.isEnabled();
     }
+
+    public void removeDisabledBtnSearch() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.querySelector(\"button[type='submit']\").removeAttribute(\"disabled\")");
+    }
+
+    public boolean validateUrl(String part){
+        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.urlContains(part));}
+
+
 }
